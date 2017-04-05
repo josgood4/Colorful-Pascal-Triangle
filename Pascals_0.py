@@ -1,8 +1,9 @@
 from turtle import *
 import math
 
-COLOR_LIST = ['red', 'blue', 'green', 'yellow', 'purple', \
-              'black', 'green4', 'blue4', 'DeepSkyBlue', 'violet']
+COLOR_LIST = ['red', 'blue', 'green', 'yellow', 'violet', 'orange']
+BLOCK_WIDTH = 10 # width of INNER blocks in the triangle - MUST BE >= 4
+HEIGHT = BLOCK_WIDTH-6  # its best if the BLOCK_WIDTH:HEIGHT ratio is ~2
 
 # calculates nCr
 def nCr(n,r):
@@ -29,6 +30,7 @@ def testGeneratePascal(mod, rowMax):
   triangle = genModPascal(mod, rowMax)
   t = Turtle()
   t.ht()
+  t.speed(0)
   for eachRow in triangle:
     ##print(eachRow)
     drawRow(t, eachRow)
@@ -42,40 +44,41 @@ def testGeneratePascal(mod, rowMax):
 def drawRow(t, row):
   l = len(row)
   if l == 1:
-    print("l=0")
-    for stOffset in (1,0):
+    ##print("l=0")
+    for stOffset in range(HEIGHT, -1, -1):
       t.color(COLOR_LIST[row[0]])
       t.pu()
       t.fd(stOffset)
       t.pd()
-      t.fd(4-stOffset*2)
+      t.fd(BLOCK_WIDTH-stOffset*2)
       t.pu()
       t.fd(stOffset)
       # reset 
-      t.bk(4)
+      t.bk(BLOCK_WIDTH)
       t.rt(90)
       t.fd(1)
       t.lt(90)
+    t.bk(BLOCK_WIDTH//2+1)
     
   else:
-    for stOffset in (2,1,0):
+    for stOffset in range(HEIGHT, -1, -1):
       for i in range(len(row)):
         t.color(COLOR_LIST[row[i]])
         if i==0:
           t.pu()
           t.fd(stOffset)
           t.pd()
-          t.fd(5-stOffset)
+          t.fd(BLOCK_WIDTH+1-stOffset)
         elif i < len(row)-1:
-          t.fd(4)
+          t.fd(BLOCK_WIDTH)
         else:
-          t.fd(5-stOffset)
+          t.fd(BLOCK_WIDTH+1-stOffset)
           t.pu()
           t.fd(stOffset)
-      t.bk(10 + (l-2)*4)
-      t.rt(90)
+      t.bk(2*(BLOCK_WIDTH+1) + (l-2)*BLOCK_WIDTH)   #l-2 is # of INNER blocks
+      t.rt(90)                                      # and 2*(B_W) is for the OUTER blocks
       t.fd(1)
       t.lt(90)
-  t.bk(2)
+    t.bk(BLOCK_WIDTH//2)
 
-testGeneratePascal(2, 16)
+testGeneratePascal(5, 32)
