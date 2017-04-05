@@ -1,9 +1,10 @@
 from turtle import *
 import math
 
+MODULUS = 2
 COLOR_LIST = ['red', 'blue', 'green', 'yellow', 'violet', 'orange']
 BLOCK_WIDTH = 10 # width of INNER blocks in the triangle - MUST BE >= 4
-HEIGHT = BLOCK_WIDTH-6  # its best if the BLOCK_WIDTH:HEIGHT ratio is ~2
+HEIGHT = BLOCK_WIDTH//2-1  # its best if the BLOCK_WIDTH:HEIGHT ratio is ~2
 
 # calculates nCr
 def nCr(n,r):
@@ -69,22 +70,16 @@ def drawRow(t, row):
           t.fd(stOffset)
           t.pd()
           t.fd(BLOCK_WIDTH+1-stOffset)
-          '''
-        elif i == l/2:
-          t.fd(BLOCK_WIDTH+1-stOffset)
-          '''
-        elif i < l:
+        elif i < len(row)-1:
           t.fd(BLOCK_WIDTH)
-        elif i == l:
+        else:
           t.fd(BLOCK_WIDTH+1-stOffset)
           t.pu()
           t.fd(stOffset)
-        #else:
-        #  t.fd(BLOCK_WIDTH)
       t.bk(2*(BLOCK_WIDTH+1) + (l-2)*BLOCK_WIDTH)   #l-2 is # of INNER blocks
       t.rt(90)                                      # and 2*(B_W) is for the OUTER blocks
       t.fd(1)
       t.lt(90)
     t.bk(BLOCK_WIDTH//2)
 
-testGeneratePascal(5, 32)
+testGeneratePascal(MODULUS, 32)
