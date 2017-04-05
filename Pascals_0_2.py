@@ -1,10 +1,10 @@
 from turtle import *
 import math
 
-COLOR_LIST = ['white', 'black', 'yellow', 'green', 'orange', 'blue', \
-              'violet', 'brown', 'pink', 'grey']
-BLOCK_WIDTH = 2 # width of INNER blocks in the triangle - MUST BE >= 4
-HEIGHT = BLOCK_WIDTH//2 # its best if the BLOCK_WIDTH:HEIGHT ratio is ~2
+MODULUS = 2
+COLOR_LIST = ['red', 'blue', 'green', 'yellow', 'violet', 'orange']
+BLOCK_WIDTH = 10 # width of INNER blocks in the triangle - MUST BE >= 4
+HEIGHT = BLOCK_WIDTH//2-1  # its best if the BLOCK_WIDTH:HEIGHT ratio is ~2
 
 # calculates nCr
 def nCr(n,r):
@@ -32,10 +32,6 @@ def testGeneratePascal(mod, rowMax):
   t = Turtle()
   t.ht()
   t.speed(0)
-  t.pu()
-  t.lt(90)
-  t.fd(HEIGHT*rowMax//2)
-  t.rt(90)
   for eachRow in triangle:
     ##print(eachRow)
     drawRow(t, eachRow)
@@ -50,7 +46,7 @@ def drawRow(t, row):
   l = len(row)
   if l == 1:
     ##print("l=0")
-    for stOffset in range(HEIGHT-1, -1, -1):
+    for stOffset in range(HEIGHT, -1, -1):
       t.color(COLOR_LIST[row[0]])
       t.pu()
       t.fd(stOffset)
@@ -62,32 +58,28 @@ def drawRow(t, row):
       t.bk(BLOCK_WIDTH)
       t.rt(90)
       t.fd(1)
-      t.lt(90)    
+      t.lt(90)
+    t.bk(BLOCK_WIDTH//2+1)
+    
   else:
-    for stOffset in range(HEIGHT-1, -1, -1):
-      t.fd(stOffset)
-      t.pd()
-      for i in range(0,len(row)):
+    for stOffset in range(HEIGHT, -1, -1):
+      for i in range(len(row)):
         t.color(COLOR_LIST[row[i]])
-        
-        # this case handles the center block when l is even
-        if i == (l-1)/2:
-          t.fd(BLOCK_WIDTH-stOffset*2)
-          
-        # this case handles the center 2 blocks when l is odd
-        elif (l%2 == 0) and ((i == (l-1)//2) or (i == (l-1)//2+1)):
-          t.fd(BLOCK_WIDTH - stOffset)
-          
-        # this is all other cases
+        if i==0:
+          t.pu()
+          t.fd(stOffset)
+          t.pd()
+          t.fd(BLOCK_WIDTH+1-stOffset)
+        elif i < len(row)-1:
+          t.fd(BLOCK_WIDTH)
         else:
-          t.fd(BLOCK_WIDTH)         
-      t.pu()
-      t.fd(stOffset)
-          
-      t.bk(BLOCK_WIDTH*l)
-      t.rt(90)
+          t.fd(BLOCK_WIDTH+1-stOffset)
+          t.pu()
+          t.fd(stOffset)
+      t.bk(2*(BLOCK_WIDTH+1) + (l-2)*BLOCK_WIDTH)   #l-2 is # of INNER blocks
+      t.rt(90)                                      # and 2*(B_W) is for the OUTER blocks
       t.fd(1)
       t.lt(90)
-  t.bk(BLOCK_WIDTH//2)
+    t.bk(BLOCK_WIDTH//2)
 
-testGeneratePascal(10, 64)
+testGeneratePascal(MODULUS, 32)
